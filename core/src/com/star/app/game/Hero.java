@@ -42,9 +42,14 @@ public class Hero {
     private Shop shop;
     private Weapon[] weapons;
     private int weaponNum;
+    private Circle magnetArea;
 
     public Shop getShop() {
         return shop;
+    }
+
+    public Circle getMagnetArea() {
+        return magnetArea;
     }
 
     public Weapon getCurrentWeapon() {
@@ -98,6 +103,7 @@ public class Hero {
         this.hp = hpMax;
         this.sb = new StringBuilder();
         this.hitArea = new Circle(position, 28);
+        this.magnetArea = new Circle(position, 200);
         this.money = 1000;
         this.shop = new Shop(this);
         createWeapons();
@@ -231,6 +237,7 @@ public class Hero {
         }
         position.mulAdd(velocity, dt);
         hitArea.setPosition(position);
+        magnetArea.setPosition(position);
         float stopKoef = 1.0f - dt;
         if (stopKoef < 0.0f) {
             stopKoef = 0.0f;

@@ -15,6 +15,7 @@ public class GameController {
     private PowerUpsController powerUpsController;
     private Hero hero;
     private Vector2 tempVec;
+    private Vector2 powMagVec;
     private Stage stage;
 
     public Stage getStage() {
@@ -53,6 +54,7 @@ public class GameController {
         this.powerUpsController = new PowerUpsController(this);
         this.hero = new Hero(this);
         this.tempVec = new Vector2();
+        this.powMagVec = new Vector2();
         this.stage = new Stage(ScreenManager.getInstance().getViewport(), batch);
         this.stage.addActor(hero.getShop());
         Gdx.input.setInputProcessor(stage);
@@ -77,6 +79,7 @@ public class GameController {
             ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAMEOVER, hero);
         }
     }
+
 
 
     public void checkCollisions() {
@@ -129,6 +132,11 @@ public class GameController {
         // Столкновение поверапсов и героя
         for (int i = 0; i < powerUpsController.getActiveList().size(); i++) {
             PowerUp pu = powerUpsController.getActiveList().get(i);
+            if (hero.getMagnetArea().contains(pu.getPosition())) {
+                powMagVec.set(hero.getPosition()).sub(pu.getPosition()).nor();
+                pu.getVelocity().mulAdd(powMagVec,3.0f);
+
+            }
             if (hero.getHitArea().contains(pu.getPosition())) {
                 hero.consume(pu);
                 particleController.getEffectBuilder().takePowerUpsEffect(pu);
